@@ -78,14 +78,7 @@
       }
       // 🧠 Implement a `getEveryNth` method whi int `n` and returns an array with the ints at position 0, n, n + n, n + n + n, etc
       getEveryNth(n) {
-        if (n <= 0) {
-          throw new Error("n must be a positive integer");
-        }
-        const result = [];
-        for (let i = 0; i < this.ints.length; i += n) {
-          result.push(this.ints[i]);
-        }
-        return result;
+        return this.ints.filter((_, index) => index % n === 0);
       }
       // 🧠 Implement a `getAllReversed` method which returns the ints in reverse order
       getAllReversed() {
