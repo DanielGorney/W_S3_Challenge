@@ -93,16 +93,41 @@
     class NerfGun {
       // 🧠 Constructor takes one argument: the total number of projectiles supported by the instance
       // 🧠 New instances initialize fully loaded and with the safety on
+      constructor(totalProjectiles) {
+        this.maxCapacity = totalProjectiles;
+        this.currentAmmo = totalProjectiles;
+        this.safetyOn = true;
+      }
+
       // 🧠 Instances have a `shoot` method that takes no arguments:
       //      * If there is ammo left and safety is off, method consumes one projectile and returns the string "Bang!"
       //      * Shooting on empty or with the safety on, returns the string "Click!"
+      shoot() {
+        if (this.currentAmmo > 0 && !this.safetyOn) {
+          this.currentAmmo--;
+          return "Bang!";
+        }
+        return "Click!";
+      }
       // 🧠 Instances have a `reload` method that takes a number and tops up the instance by that number
       //      * Reloading returns a string in the following format: "<number> projectiles left!"
       //      * Reloading by more than capacity fills the instance to capacity
       //      * Passing an argument which is not a number larger than zero returns the string "Error reloading!"
+      reload(amount) {
+        if (typeof amount !== 'number' || amount <= 0) {
+          return "Error reloading!";
+        }
+        
+        this.currentAmmo = Math.min(this.currentAmmo + amount, this.maxCapacity);
+        return `${this.currentAmmo} projectiles left!`;
+      }
       // 🧠 Instances have a `toggleSafety` method that takes no arguments and switches the state of the safety
       //      * When engaging the safety, return "Safety enabled!"
       //      * When disengaging the safety, return "Safety disabled!"
+      toggleSafety() {
+        this.safetyOn = !this.safetyOn;
+        return this.safetyOn ? "Safety enabled!" : "Safety disabled!";
+      }
       // 🌟 HINT: instances need to keep track of their maximum capacity as well as their current capacity
 
     }
@@ -112,9 +137,26 @@
       // 🧠 Constructor takes two arguments:
       //      * First arg is a string with the whole text of the book
       //      * Second arg is the number of characters contained in a single page of the book
+      constructor(text, pageSize) {
+        this.text = text;
+        this.pageSize = pageSize;
+        this.currentPage = 0;
+      }
       // 🧠 Instances have a `next` method:
       //      * It takes no args and returns the next page of the book
-      //      * If the next page is empty because we have reached the end, return null instead
+      //      * If the next page is empty because we have reached the end, return null 
+      next() {
+        if (this.currentPage * this.pageSize >= this.text.length) {
+          return null;
+        }
+
+        const start = this.currentPage * this.pageSize;
+        const end = start + this.pageSize;
+        const page = this.text.slice(start, end);
+
+        this.currentPage++;
+        return page;
+      }
       // 🧠 Example of usage:
       //    const ebook = new EBook('abcdefg', 3)
       //    ebook.next() // returns "abc"
@@ -122,7 +164,15 @@
       //    ebook.next() // returns "g"
       //    ebook.next() // returns null
       // 🌟 HINT: remember about the `slice` method which strings and arrays have
-      // ❗ Feel free to implement `back`, although this is not required nor graded
+      // ❗ Feel free to implement `back`, although this is not required nor 
+      back() {
+        if (this.currentPage <= 1) {
+          return null;
+        }
+
+        this.currentPage -= 2;
+        return this.next();
+      }
 
     }
 
